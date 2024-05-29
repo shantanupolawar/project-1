@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Air Quality</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            background-color: #0074c2;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        button {
+            background-color: #0074c2;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005b99;
+        }
+
+        #quality {
+            font-size: 20px;
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Air Quality for <span id="city"></span></h2>
+    <br>
+
+    <input type="text" name="cityname" id="cityInput">
+    <center><button id="submit">Get Air Quality</button></center>
+    <br>
+    Quality: <span id="quality"></span>
+
+    <script>
+        
+		
+		const apiKey = '88d973bed0msh011654c8ea63ac3p136fe3jsn6ee1157235bd';
+
+        function getAirQuality(city) {
+            const url = `https://air-quality-by-api-ninjas.p.rapidapi.com/v1/airquality?city=${city}`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': apiKey,
+                    'X-RapidAPI-Host': 'air-quality-by-api-ninjas.p.rapidapi.com'
+                }
+            };
+
+            fetch(url, options)
+                .then((res) => {
+                    console.log(res.ok);
+                    console.log(res.status);
+                    return res.json();
+                })
+                .then(data => {
+                    console.log(data);
+
+                    // Display city name
+                    document.getElementById('city').innerText = city;
+
+                    // Display air quality information
+                    document.getElementById('quality').innerText = `Overall AQI: ${data.overall_aqi}`;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        document.getElementById('submit').addEventListener('click', () => {
+            const cityInput = document.getElementById('cityInput').value;
+            getAirQuality(cityInput);
+        });
+
+        // Initial call
+        getAirQuality('Seattle');
+		
+		
+    </script>
+</body>
+
+</html>
